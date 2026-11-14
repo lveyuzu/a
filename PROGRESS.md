@@ -28,6 +28,7 @@ Last updated: 2026-11-14
 - [x] Data-source assessment (`docs/DATA_SOURCES.md`): 12 outside services examined; scoring unchanged.
 - [x] Lunar polar statistics from the Diviner Polar Resource Product, already computed, now shown in reports.
 - [x] Documentation and presentation.
+- [x] Published on GitHub Pages (https://tariatiineserguu.github.io/Nasa-Hackathon/), published from the `gh-pages` branch by `web/deploy-pages.sh`.
 
 ## Research findings
 
@@ -91,7 +92,6 @@ Last updated: 2026-11-14
 - Fine-scale tier (≤100 m DEM, rock abundance) for shortlisted sites.
 - Gridded lithology (GLiM) to bring geology into the global scan.
 - Field-accessibility layer (roads, altitude, permits) for an operations profile.
-- Host the built site (for example GitHub Pages) for a public demo link.
 
 ## Blocking issues
 

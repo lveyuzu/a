@@ -26,6 +26,9 @@ A candidate is a hypothesis for field work, not a conclusion.
 
 ## Run the application
 
+Live: **https://tariatiineserguu.github.io/Nasa-Hackathon/**. To publish a new version, run `bash web/deploy-pages.sh`:
+it builds the app and pushes `web/dist` to the `gh-pages` branch that GitHub Pages serves.
+
 The processed results are committed, so the app runs without the data pipeline.
 
 ```bash
