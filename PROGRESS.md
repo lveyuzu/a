@@ -28,7 +28,7 @@ Last updated: 2026-11-14
 - [x] Data-source assessment (`docs/DATA_SOURCES.md`): 12 outside services examined; scoring unchanged.
 - [x] Lunar polar statistics from the Diviner Polar Resource Product, already computed, now shown in reports.
 - [x] Documentation and presentation.
-- [x] Published on GitHub Pages (https://tariatiineserguu.github.io/Nasa-Hackathon/), published from the `gh-pages` branch by `web/deploy-pages.sh`.
+- [x] Published on GitHub Pages (https://tariatiineserguu.github.io/Nasa-Hackathon/), deployed from `main` by GitHub Actions.
 
 ## Research findings
 
