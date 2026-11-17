@@ -1,307 +1,264 @@
-# PLANETARY TWIN — OBSERVATORY
+# PLANETARY TWIN — PLATE & MARGIN, NIGHT EDITION
 
-The design system of the web application, as implemented in `web/src/styles.css` and the components
-under `web/src/components`. If this file and the code disagree, the code is wrong or this file is out
-of date: fix whichever it is.
+The design system of the web application, as implemented in `src/styles.css` and the components under
+`src/components` (the root app, which is what Vercel serves). `web/` still holds the earlier Observatory
+build that GitHub Pages publishes. If this file and the code disagree, the code is wrong or this file is
+out of date: fix whichever it is.
 
 ## 1. Identity
 
-Planetary Twin is an instrument for looking at Earth as if it were another planet. The models are a
-mission operations console, an observatory's plate archive and a planetary survey sheet: a dark room,
-one bright globe, readouts in tabular figures, and notes that say how far a statement can be trusted.
+Planetary Twin reads like a sheet from a planetary atlas laid next to the instrument that made it. The
+models are the USGS planetary geologic map sheets (a plate with a neatline, a title block and an
+explanation in the margin), a geological expedition report, a scientific paper with booktabs tables
+and numbered equations, and a mission planning table.
 
-Five rules give the interface its character. Everything else follows from them.
+Five rules give the interface its character.
 
-1. **The map owns the screen.** On Explore the globe sits in a full-bleed well with nothing around it
-   but its own furniture. Space is shown only where there is space: a faint, static star field behind
-   the globe, which the map covers in flat view.
-2. **Colour is reserved for two things.** The three bodies (Earth, Mars, Moon) and the similarity
-   layer. Interface chrome is chalk, silver and midnight.
-3. **Confidence is a fill, never a colour.** A solid mark is high confidence, a half-filled mark
-   moderate, an open mark low. Because similarity owns colour and confidence owns fill, the two cannot
-   be confused on a map, in a list or in a tooltip.
+1. **The instrument is a step darker than the analysis.** Maps, live readouts and imagery sit on
+   near-black plates; written evidence, rankings, reports and the method sit on the graphite page.
+2. **Navy is the interface; colour is data.** Navy marks what is pressed, selected or focused. Beyond
+   it, colour belongs to the three bodies and the similarity layer.
+3. **Confidence is a fill, never a colour.** Solid is high, half-filled moderate, open low, on the map,
+   in lists, in tooltips and in reports.
 4. **How a number was obtained is drawn as a pattern.** Solid means measured, hatched means model or
-   blend, dotted means proxy. The same three patterns appear on tags, on score bars and on chart lines
-   (model curves are dashed).
-5. **Every map says what it is.** Title block, legend with numeric ranges, scale bar, credit line, and
-   for outside layers the product, resolution, limits and whether the same product is scored.
+   blend, dotted means proxy, on tags, score bars and chart lines (model curves are dashed).
+5. **Every map is a plate.** Neatline or registration corners, title block, legend with numeric
+   ranges, scale bar, credit line, and for outside layers the product, resolution and limits.
 
-Things the interface does not use: decorative gradients or glows, glass effects, cards nested in cards,
-uppercase tracked labels, icon tiles, emoji, monospace type, entrance animations on scroll.
+Things the interface does not use: gradients or glows as decoration, glass effects, cards nested in
+cards, uppercase tracked labels, icon tiles, emoji, monospace type, entrance animations on scroll.
 
 ## 2. Colour
 
-Grounds are midnight blue, darkest where the map sits. Text contrast is measured on `--bg`.
+Night edition: a black page, a graphite scale, and navy for everything you press or that is selected.
+Every component reads its colours from surface tokens (`--bg`, `--fg`, `--fg-2`, `--fg-3`, `--line`,
+`--line-2`, `--earth`, `--mars`, `--moon`); `.plate` (also `.mapframe`, `.frame`, `.locator` and map
+popups) redefines them a step blacker, so the instrument reads as deeper than the page around it.
+
+### Page and plate
 
 | Token | Hex | Use |
 |---|---|---|
-| `--void` | `#060A13` | The map well behind the globe (obsidian) |
-| `--bg-sunk` | `#080D18` | Masthead, rails, readout console, sticky bars |
-| `--bg` | `#0B1220` | Page ground (deep midnight) |
-| `--bg-raised` | `#121B2D` | Selected rows, tooltips, formula blocks, open layer details |
-| `--bg-hover` | `#162135` | Hover on rows and controls |
-| `--line` | `#1D2839` | Hairlines inside a block |
-| `--line-strong` | `#2E3B52` | Block edges, control borders at rest |
-| `--fg` | `#ECE5D6` | Chalk (warm off-white): headings, values, symbols, selected controls. 14.9:1 |
-| `--fg-2` | `#C9C3B6` | Reading text. 10.7:1 |
-| `--silver` | `#A9B4C2` | Lunar silver: map furniture, annotation, frame marks. 8.9:1 |
-| `--note` | `#8C95A5` | Labels and fine print. 6.2:1 |
-| `--faint` | `#5D687B` | Non-text marks only (ticks, dashed outlines) |
-| `--mars` / `--mars-hi` | `#D0713F` / `#EBA27C` | Mars: fills / text (oxidised copper) |
-| `--moon` / `--moon-hi` | `#7FBAD3` / `#A9D6E8` | Moon: fills / text (ice blue) |
-| `--earth` / `--earth-hi` | `#86A57F` / `#B3CCA8` | Earth: fills / text (mineral green) |
-| `--sea` / `--land` | `#0A1628` / `#262C35` | Water and land on the SVG maps |
+| `--paper` | `#0A0B0E` | Page ground (rails, catalogue, reports, long pages) |
+| `--sheet` / `--shade` | `#111318` / `#171A21` | Raised insets; selected rows and tab strips |
+| `--ink` | `#E8EAEE` | Headings, values. 16:1 |
+| `--ink-2` | `#B9BEC8` | Reading text. 10:1 |
+| `--ink-3` | `#8B929E` | Labels, notes, credits. 6:1 |
+| `--edge` / `--edge-2` | `#2F3540` / `#4A5260` | Borders of controls; booktabs rules |
+| `--plate` / `--plate-0` | `#050608` / `#020304` | Map column and map wells |
+| `--chalk` … `--chalk-4` | `#E8EAEE` … `#39404B` | Text and line work on plates |
 
-`--accent` and `--accent-hi` point at Mars or Moon, set by `data-body` on the app root (and on any
-block that is about one body, such as a finding), so one switch re-colours every accent on the page.
+### Navy
 
-Selected controls are chalk with midnight text. A selected row carries a 2 px bar in the accent.
+| Token | Hex | Use |
+|---|---|---|
+| `--navy` … `--navy-3` | `#1B3260` … `#3A5FA3` | Fills and borders of selected keys |
+| `--navy-hi` | `#94ADDC` | Focus, the section marker, selection bars, matched squares, slider fills |
+| `--key` | eased gradient `#2E5193` → `#1B3260` | Every selected key: chips, segments, body switch, primary buttons, covered cells |
+
+Gradients are eased: their stops follow an ease-out curve instead of a straight line, so a glow never
+shows a band. They are used for the page-head glow, the masthead, the selected keys, the hover sweep on
+rows, the score bars (graphite to navy), the margin band and the rim of light around the globe.
+
+### Bodies
+
+Earth `#93B98F` (mineral green), Mars `#E8865A` (iron oxide), Moon `#9EC3D7` (anorthosite slate). They
+mark data, not interface: chart series, the planetary values in comparisons, the similarity figure in a
+report, the body discs. The compared body is set by `data-body` (`--acc-paper`, `--acc-plate`).
+
+### The night sky
+
+Behind the globe a star field is drawn on canvas from a fixed seed (two layers; the second breathes
+slowly so a few stars twinkle), and a navy rim of light sits on the globe's limb, positioned from the
+map's padding and sized from its zoom. They exist to set the Earth off; in flat view the map covers them.
+The Atlas relief basemap uses graphite land on a navy sea.
 
 ### Similarity ramps
 
 Every basemap is dark, so each body has one ramp, ordered in lightness so it survives greyscale and
-colour-blind viewing (`web/src/lib/score.ts`). The strongest match is always the brightest cell.
-
-| Ramp | Direction |
-|---|---|
-| `mars` | oxblood → copper → apricot → ivory |
-| `moon` | slate teal → ice blue → near white. The low end is kept clear of the navy sea so that a weak land cell never reads as water |
-
-The layer shows only the best-scoring 30% of land, in five classes by share of land area: top 30–10%,
-10–3%, 3–1%, 1–0.1%, top 0.1%. Class limits are recomputed from the live distribution whenever the
-region, dimension or weights change, and the legend prints the score range of each class. Classes are
-drawn at 85% opacity so relief shading shows through. A continuous style is available. Classes are a
-display choice only; they never touch a score or a rank.
+colour-blind viewing (`src/lib/score.ts`); the strongest match is always the brightest cell. `mars` runs
+oxblood → copper → apricot → ivory, `moon` slate teal → ice blue → near white. The layer shows the best
+30% of land in five classes by share of land area (top 30–10%, 10–3%, 3–1%, 1–0.1%, 0.1%), recomputed
+from the live distribution. Classes are a display choice only.
 
 ## 3. Typography
 
-Two families, loaded from Google Fonts in `web/index.html`.
+Two families from Google Fonts (`index.html`).
 
 | Family | Role |
 |---|---|
-| **Archivo** (variable width 62–125, weight 100–900) | Everything that is a name, a number or a control. Width carries the role: expanded (125%) for the wordmark, page titles, site and region names and large figures; 112% for readout values and scores; normal for controls, tables and labels; 94% with tabular figures for coordinates and measurements (`.num`) |
-| **Source Serif 4** (optical sizes) | Reading text: ledes, prose, section titles inside documents, article headlines, italic remarks from the instrument itself ("Where Earth resembles", the report line, the idle readout) |
+| **Geologica** (variable, 200–700) | Everything that is a name, a number or a control. Light (200–300) and tightly tracked for page titles, site names and large figures; 400–500 for interface text. Tabular figures wherever numbers are compared |
+| **Newsreader** (optical sizes) | Running prose: ledes, report and finding text, list items, limits. Its italic is the instrument's own voice: "Where Earth resembles", "Compare Earth with", report lines, captions, cartographic names on the map |
 
-There is no monospace face. Numbers line up because Archivo's tabular figures are switched on wherever
-numbers are compared.
+There is no monospace face.
 
-| Element | Size / line height | Notes |
-|---|---|---|
-| Page title | 34–58 px / 1.04, Archivo 125%, weight 300 | `clamp`, balanced wrap, max 17 characters per line |
-| Result figure (Findings) | 68 px, Archivo 125%, weight 250 | the "of N" in normal width |
-| Site name in a report | 30–46 px, Archivo 125%, weight 330 | scales with the report column |
-| Region name on the map | 30 px, Archivo 125%, weight 350 | |
-| Section title in a document or report | 22–30 px / 1.15–1.2, serif 500 | |
-| Panel heading in a rail | 15 px, Archivo 600 | phrased as the question the control answers |
-| Lede | 18.5 px / 1.55, serif | max 64 characters |
-| Prose | 16.5 px / 1.6, serif | max 66 characters |
-| Interface text | 14 px / 1.45 | |
-| Labels and annotation | 12–12.5 px, `--note` | sentence case, never uppercase |
-| Fine print and credits | 11.5 px | |
+| Element | Size / line height |
+|---|---|
+| Page title | 38–68 px / 1.0, Geologica 300, −0.035 em |
+| Result figure (Findings) | 112 px, Geologica 200 |
+| Site name in a report | 36–58 px, Geologica 300 |
+| Region name in the map title block | 30 px, Geologica 300 |
+| Section title on a page | 30 px, Geologica 400 |
+| Panel heading | 15 px, Geologica 500, phrased as the question the control answers |
+| Lede | 19 px / 1.55, Newsreader |
+| Prose | 17 px / 1.6, Newsreader, at most 66 characters |
+| Interface text | 13.5–14 px |
+| Labels, notes | 12–13 px, sentence case |
+| Credits | 11.5–12 px |
 
-## 4. Space and layout
+## 4. Composition
 
-- Base gutter 20 px (16 px on small screens). Blocks are separated by rules, not by boxes.
-- Structure is square. Anything you press or that floats over the map has a 4 px radius. The body
-  switch is the one pill, because choosing a body is the one choice that changes everything.
-- Shadows only where something floats over moving content (the map tooltip).
-- Each section has its own composition:
+Structure is square. Pressable controls take a 2 px radius. Two shapes are round on purpose: the body
+discs, and the candidate tag, which is a pill because candidates are circles on the map (established
+analogs are square there and square in their tag).
 
 | Section | Composition |
 |---|---|
-| Explore | Instrument rail, map well, ranked catalogue or field report. The readout console runs under the map |
-| Field report | One reading column with a sticky bar (back, section index), a title ledger, then sections divided by rules |
-| Findings | An asymmetric title block, then the three results as a ledger of label and figure, statement, evidence chart; then articles with a sticky figure column |
-| Portfolio | Title block, a framed Equal Earth plate, a roster, the matrix, the shortfalls |
-| Method & data | A document: a numbered contents column that follows the reader, beside one text column with typeset formulas |
-
-Long-form pages use a 7 : 5 split for the title block (title left, lede right, aligned to the base).
+| Explore | Paper rail (question, layers) · the plate (map with neatline, title block, controls; margin band with legend and readout; credit line) · paper catalogue (ranked sites, reference region) or the field report |
+| Field report | A form: a sticky bar (back, section index), a title block with the site's station line (DMS, decimal, elevation), a four-cell measurement ledger, then sections whose titles sit in a left gutter that follows the reader |
+| Findings | A paper: the question as a title, the three results as a ledger of label and giant figure, statement, evidence chart; then one article per finding with a sticky column of image plates |
+| Portfolio | A planning table: an Equal Earth plate running edge to edge, a lettered manifest of the six sites under it, the coverage matrix as a requirement board, the shortfalls |
+| Method & data | A manual: a numbered contents column that follows the reader, numbered sections, equation plates numbered (1)…(n) down the page, booktabs tables, expandable dataset rows |
 
 ## 5. Navigation
 
-- Masthead: wordmark (Earth and its twin overlapping), the four sections, and the body switch
-  ("Compare Earth with Mars / Moon", each with a disc in the body colour that fills when selected).
-  The current section carries a 2 px chalk bar on the masthead rule.
-- Routes are hash routes and are kept from the original application: `#/explore?t=<region>&s=<site>`,
-  `#/findings`, `#/portfolio`, `#/method`. Explore also writes `l` (dimension), `b` (basemap) and
-  `o` (observation overlay) when they differ from the defaults, so a view can be shared.
-- Tabs inside a column (Question / Map layers, Ranked sites / Reference region) use the same chalk bar.
-- The field report has a sticky index of its twelve sections; the one being read is underlined.
-  The Method page's contents column does the same.
-- On screens under 900 px the four side panels share one place under the map, chosen from a sticky
-  bar: Sites, Region, Question, Layers.
+- Masthead on paper: the wordmark (Earth and its twin overlapping), the four sections, and the body
+  switch. The section being read is marked by the lens, the shape where the two circles of the
+  wordmark overlap, filled in the accent, and a 3 px ink bar on the masthead rule.
+- Body switch: "Compare Earth with" then Mars and Moon as two keys with a disc in the body colour;
+  the chosen key is ink with a filled disc.
+- Routes are hash routes: `#/explore?t=<region>&s=<site>`, `#/findings`, `#/portfolio`, `#/method`.
+  Explore also writes `l` (dimension), `b` (basemap) and `o` (observation overlay).
+- Panel tabs are index tabs: the open tab is cut from the same paper as the panel under it.
+- The field report and the Method page each keep a sticky index; the section being read is marked.
+- 901–1180 px: the rail folds into the side column behind the tabs Sites, Region, Question, Layers.
+  Under 900 px the same tabs choose one panel under the map.
 
 ## 6. Controls
 
 | Control | Rule |
 |---|---|
-| Button | 1 px border, transparent fill; primary is a chalk fill with midnight text |
-| Chip | 1 px border; selected is a chalk fill. Used for presets and filters |
-| Segmented control | One border around the group, segments inset by 2 px; the selected segment is chalk. Used for either/or choices on and beside maps |
-| Range slider | A 2 px track filled to the value in the body colour, a chalk thumb, the value in tabular figures beside it |
-| Radio / checkbox rows | Native inputs with a name, one sentence of purpose and a source line. An open row turns `--bg-raised` and shows its facts |
-| Date control | Previous, native date field, next; steps by the layer's own period (day, month, year) and stops at the latest date the service is expected to hold |
-| Text field (go to coordinates) | No inner box; the frame brightens on focus; an error is stated in words above the field |
+| Button | 1 px ink border; primary is ink with paper text |
+| Chip | Presets (mission profiles); selected is ink |
+| Filter keys | Chips joined into one row per question (status; minimum confidence) |
+| Segmented control | One border around the group; the selected segment is filled with the surface's ink |
+| Range | A ruled scale with a tick at every whole step, filled to the value in the accent, and a slide-rule cursor; the value in tabular figures beside it |
+| Radio / checkbox rows | Native inputs in ink, with a name, one sentence of purpose and a source line; an open row turns to sheet and shows its facts |
+| Date control | Previous, native date field, next; steps by the layer's period |
+| Go to coordinates | A plate panel; the frame brightens on focus; an error is stated in words |
 
-Button text says what will happen ("Open the field report for Harrat Khaybar", "Search the Copernicus
-catalogue", "Show every site"). There are no arrow glyphs in button text; previous/next and back use
-drawn chevrons.
+Button text says what will happen. There are no arrow glyphs in button text.
 
-### States
+States: loading shows the wordmark, "Loading the analysis" in italic and a thin ink bar; "Loading map
+tiles" appears on a map after a third of a second. Empty filters say so and offer "Show every site".
+A data-load failure names what failed and how to fix it; a map layer or the satellite catalogue that
+does not answer says so beside the map.
 
-- **Loading:** the wordmark, "Loading the analysis" and a thin indeterminate bar. "Loading map tiles"
-  appears on a map if tiles take more than a third of a second.
-- **Empty:** when filters leave no site, the ranking says so, says why that is not the end, and offers
-  "Show every site".
-- **Error:** the data-load failure names what failed and how to fix it. A map layer or the satellite
-  catalogue that does not answer says so beside the map; everything scored keeps working.
+## 7. Tables and indicators
 
-## 7. Tables
-
-- `table.data`: full width, strong rule under the header, hairlines between rows, numbers in tabular
-  figures and right-aligned. Rows that open a report highlight on hover and respond to Enter.
-- `table.ledger`: the same, inside reports, with a caption that states what the table is.
-- `table.matrix`: the coverage matrix. A covered requirement shows the site letter on a faint chalk
-  tint; an open one shows the best available score with a thin bar. Pointing at a site turns its cells
-  chalk.
-- Position on a 0–1 scale is drawn as a mark on a strip with reference ticks, not as a filled bar, so a
-  low value is as visible as a high one.
+- `table.data`, `table.ledger`: booktabs rules (1.5 px ink above and below, 1 px ink under the header,
+  hairlines between rows), tabular figures, numbers right-aligned. A ledger has an italic caption.
+  Rows that open a report underline their name on hover and respond to Enter.
+- `table.matrix`: a covered requirement shows the site letter on an ink tint; an open one shows the
+  best available score over a thin bar. Pointing at a site turns its cells ink.
+- Position on a 0–1 scale is a mark on a strip with reference ticks.
+- Pips: one square per dimension the region needs; filled in the accent when matched, open when not,
+  dotted when there is no data. Matched and failed list items use the same filled and open squares.
+- Score bars: accent fill with an ink tick at the match threshold; per-variable bars take the pattern
+  of their weakest evidence kind; confidence meters are grey ink, never the body colour.
 
 ## 8. Charts
 
-Hand-drawn SVG in `web/src/components/charts.tsx` and `Pages.tsx`.
-
-- Axis text in Archivo 10.5 px with tabular figures, grid lines in `--line`, no chart borders.
-- Earth is always mineral green, the planetary body copper or ice blue. Line weight 1.6 px.
-- Model curves (Mars Climate Database) are dashed; measured curves (Diviner) are solid.
-- Shaded relief panels are drawn from the same 32 × 32 elevation window the terrain score uses, with a
-  shared vertical exaggeration and light direction on both sides of a comparison.
-- Score bars: body colour, with a chalk tick at the match threshold. Per-variable bars take the pattern
-  of their weakest evidence kind. Confidence meters are chalk-grey, never the body colour.
-- The three results on Findings each carry their evidence as a figure: a strip of every established
-  analog's calibrated rank (filled = chosen for environment), the lead site's dimension bars against
-  the threshold, and one square per portfolio requirement (filled = covered).
+Hand-drawn SVG (`src/components/charts.tsx`, `Pages.tsx`). Axis text Geologica 10.5 px in tabular
+figures, grid lines in `--line`, no chart borders. Earth is always green, the planetary body rust or
+slate, 1.6 px lines. Model curves are dashed. Chart colours are CSS variables, so a chart takes the
+tone of the surface it sits on. Shaded relief panels are drawn from the 32 × 32 elevation window the
+terrain score uses, with shared exaggeration and light.
 
 ## 9. Maps
 
-### Frames and furniture
+### The Explore plate
 
-The main map is a well with small cross marks at its four corners, as on a survey photograph. Smaller
-maps sit in a 1 px frame. Furniture floats in midnight panels at 90% opacity with a 1 px border:
+- **Neatline** inset 10 px from the frame: a ruled line with minor ticks every 48 px, major ticks
+  every 240 px, and registration crosses at the four corners.
+- **Title block**, top left: "Where Earth resembles", the region, its body and coordinates, the
+  dimension and weight profile in force. The dimension selector hangs under it as an index strip.
+- **View controls**, top right: zoom in, zoom out, reset, globe / flat.
+- **Centre readout**, bottom left: the coordinates the map is pointed at, the zoom, the projection.
+- **Scale bar**, bottom right, in alternating segments; computed with each body's radius.
+- **Go to** field above the scale bar.
 
-- **Title block** (top left): "Where Earth resembles", the region, its coordinates, the dimension and
-  weight profile in force.
-- **Dimension selector** under it.
-- **View controls** (top right): zoom in, zoom out, reset, globe / flat.
-- **Legend** (bottom left): class swatches with score ranges, a histogram of land area by score, the
-  official legend of any observation overlay, and the key to site symbols.
-- **Scale bar** (bottom right): a round distance measured at the map centre. On Moon and Mars maps it
-  is computed with that body's radius.
-- **Go to** field for coordinates.
-- **Readout console** under the map, at a fixed height on wide screens so the map never resizes under
-  the cursor: coordinates, the cell's similarity and share of land, and every dimension score with a
-  small bar against the threshold. A click pins the cell and names the nearest listed site.
-- **Credit line** under the console, rebuilt from the layers that are on.
+### The margin band
 
-### The relief basemap
+Under the plate, as the explanation sits under a map sheet, at a fixed height on wide screens so the
+map never resizes under the cursor:
 
-"Atlas relief" is drawn in the browser from open elevation tiles: a hypsometric tint in basalt tones
-(steps at 0, 500, 1500, 3000, 4500, 6000 m) under silver hill shading lit from the north-west, on a
-flat midnight sea. Coastlines and graticule are chalk at reduced opacity; country boundaries are dashed.
+- **Legend**: unit boxes with each class's share of land and score range, beside the land-area
+  histogram whose bars are painted in the colour that cell gets on the map (grey for the 70% not
+  drawn); then the key to site shape and fill. Observation overlays add their official legend.
+- **Readout**: the cursor or pinned cell's coordinates, its similarity and share of land, and every
+  dimension score with a bar against the threshold. A click pins the cell and names the nearest site.
 
-### Site symbols
+When the map column is narrower than 720 px (beside an open report, on tablets) the band stacks: the
+legend in two columns of classes, the readout under it.
 
-| Shape | Meaning | Fill | Meaning |
-|---|---|---|---|
-| Circle | candidate from the scan | solid | high confidence |
-| Square | established analog | half | moderate confidence |
-| | | open | low confidence |
+### On the map
 
-Symbols are chalk with a midnight halo, so they read on relief and on imagery. The eight best-ranked
-sites carry a small numbered flag once the map is zoomed in enough to separate them. The selected site
-is marked with a survey reticle.
+- Atlas relief basemap: hypsometric basalt tints on a slate sea under hill shading lit from the
+  north-west; chalk coastlines and graticule, dashed boundaries.
+- Site symbols: circle = candidate, square = established; fill = confidence; chalk on a plate halo.
+  The eight best-ranked sites carry numbered flags when zoomed in; the selected site gets a reticle.
+- Names of deserts, plateaus and ranges in italic Newsreader, letter-spaced for the largest regions.
+- Tooltips are plate panels that never take the pointer.
 
-Place names of deserts, plateaus and ranges are set in letter-spaced italic serif in silver, as on a
-printed atlas, and thin out with zoom.
+### Other maps
 
-### Tooltips
+- Site map and Moon/Mars maps sit in plate wells with registration corners, with their segmented
+  controls on the paper above and their facts and credits below.
+- Locator globes are small dark discs on paper (orthographic; planetary locators show a graticule only).
+- The Portfolio plate uses Equal Earth, which keeps areas true.
 
-A raised panel with chalk text. It never takes the pointer, so it cannot steal hover from the map.
-Order: site name, place, similarity with the reference region, confidence, status, then a small bar per
-dimension with matched dimensions in the body colour.
-
-### Layer system
-
-Layers are defined in one registry, `web/src/lib/layers.ts`. A layer cannot be added without its
-purpose, product, resolution, units, period, limits, source link and its relation to the score.
-
-| Group | Behaviour | Layers |
-|---|---|---|
-| Similarity | Pipeline output, 0.25° cells, classed or continuous, opacity control | overall and one per dimension |
-| Basemap | One at a time | Atlas relief, Sentinel-2 cloudless, Blue Marble with relief, MODIS true colour by day |
-| Observations | One at a time, below the similarity layer, with date and opacity | land surface temperature day and night, vegetation index, albedo, land cover, precipitation, surface pressure, column water vapour, snow cover, Sentinel-2 passes, Sentinel-1 radar |
-| Reference | Any combination | graticule, coastlines, country boundaries, place names, geologic map units |
-
-Drawing order, bottom to top: basemap, geologic units, observation, similarity, graticule, boundaries,
-coastline, cell outline, site symbols.
-
-Conventions:
-
-- An active layer is a filled radio or checkbox, and an active overlay opens to show its facts.
-- A layer whose product is also scored carries the tag "same product is scored". It is still only a
-  picture here.
-- Outside layers are pictures of data. They are never read as numbers and never enter a score.
-- Imagery basemaps are desaturated and dimmed while the similarity layer is on, so the ramp stays legible.
-- Radar always appears with a note on what backscatter can and cannot show.
-
-Moon and Mars maps use their own registry of layers from NASA Solar System Treks. The tiles arrive in
-plate-carrée form and are re-projected to the map projection in the browser (`web/src/lib/trek.ts`).
-Their globes float in the same star field as the Earth map. Colourised layers that come without a
-numeric legend say so.
-
-### Small static maps
-
-- **Locator globe** (SVG, orthographic): where a site is on Earth, or a region on Mars or the Moon.
-  Planetary locators show a graticule only, since there is no coastline to draw.
-- **Portfolio plate** (SVG, Equal Earth): an equal-area world map, the right projection for showing
-  how sites are spread. Labels are placed so they do not collide.
+The layer registry (`src/lib/layers.ts`) requires every outside layer to state its purpose, product,
+resolution, units, period, limits, source and relation to the score. Outside layers are pictures of
+data and never enter a score.
 
 ## 10. Motion
 
-Motion answers an action; nothing moves on its own except the loading indicators.
+One entrance per view, then motion only in answer to an action. Curves: `--ease-out`
+(`cubic-bezier(0.16, 1, 0.3, 1)`) for arrivals, `--ease-io` for loops.
 
-- Map moves (fly to a site, reset) are animated, and MapLibre skips them when the reader asks for
-  reduced motion.
-- Switching section fades the new view in over 200 ms. Opening a field report slides it 14 px in from
-  the right while it fades in (240 ms).
-- Tiles fade in over 120 ms. Controls change colour over 120 ms.
-- Nothing animates on scroll or on page load.
-- `prefers-reduced-motion` removes all transitions, animations and smooth scrolling.
+- Explore: the neatline opens from the centre, the globe fades in when the map is ready, the title block
+  slides in, the controls and margin band follow; the first ranked rows rise in sequence.
+- A field report slides in beside the map and its site name is written on.
+- Long pages: the title is written on, the lede rises, the rule under them draws from the left in navy.
+- The section marker and tab indicators draw in; score bars ease to new values when weights change;
+  rows take a navy sweep on hover; keys press down a pixel.
+- Stars twinkle on a slow loop. Map moves are animated by MapLibre.
+- `prefers-reduced-motion` removes all transitions, animations, twinkling and smooth scrolling.
 
 ## 11. Responsive behaviour
 
 | Width | Behaviour |
 |---|---|
-| ≥ 1540 px | Three columns; the report opens beside the rail and the map |
+| ≥ 1540 px | Three columns; a report opens beside the rail and the map |
 | 1180–1540 px | With a report open the rail gives its space to the map |
-| < 1280 px | Masthead tagline and the "Compare Earth with" label are dropped; rails narrow |
-| < 1180 px | Title blocks stack; the results ledger moves its chart under the statement; Method contents move above the text |
-| < 900 px | One column: the map (54% of the screen height), the readout, the legend as a strip, then one panel at a time chosen from a sticky bar. With a report open the map shrinks to a third of the screen and its furniture steps aside. Multi-column blocks stack; tables scroll sideways inside their own box |
-| < 520 px | Locator globes in report headers are dropped; legend classes become one column |
+| < 1320 px | Masthead tagline and "Compare Earth with" are dropped; rails narrow |
+| 901–1180 px | Map and one side column; the rail's panels move behind the side column's tabs |
+| < 1180 px | Title blocks stack; the results ledger moves its chart under the statement; Method contents move above the text; the portfolio manifest goes to two columns |
+| < 900 px | One column: the map (56% of the screen height), the margin band, then one panel at a time chosen from sticky tabs. With a report open the map shrinks and its furniture steps aside. Tables scroll sideways inside their own box |
+| < 560 px | Report locator globes are dropped; legend classes go to two columns |
 
-When the map column is narrower than 600 px (a container query, so it also applies beside an open
-report) the legend keeps only its classes and the readout tightens. Nothing scientific is removed at any
-width: every table, chart, map and note is still present on a phone.
+Nothing scientific is removed at any width.
 
 ## 12. Accessibility
 
-- Text contrast is at least 6:1 on the page ground (`--note`); `--faint` is used only for non-text marks.
-- Focus is a 2 px chalk outline on every control. Table rows and map marks that open a report are
-  focusable and respond to Enter.
-- State is never carried by colour alone: confidence by fill, evidence kind by pattern, matched
-  dimensions by filled against open squares, the selected body by a filled disc and a pressed button.
-- Maps have text equivalents: the ranked list for site positions, the readout console for cell values,
-  the legend for class ranges, and coordinates in every report.
-- Controls have accessible names; toggles use `aria-pressed`, tabs `aria-selected`, the section
-  indexes `aria-current`.
-- Map rotation and tilt are off, so north is always up and the north arrow is always true.
+- Text contrast is at least 4.5:1 everywhere: labels (`--ink-3`) are 6.3:1 on the page and 4.6:1 on the
+  most saturated selected row; text on navy keys is 7–11:1. `--ink-4` and `--chalk-4` are for non-text marks only.
+- Focus is a 2 px outline in `--navy-hi`; inside clipping strips (masthead, tabs, lists) it is drawn
+  inside the control. Rows and map marks that open a report are focusable and respond to Enter.
+- State is never carried by colour alone: confidence by fill, evidence by pattern, matched dimensions
+  by filled against open squares, the chosen body by a filled disc and a pressed key.
+- Maps have text equivalents: the ranked list, the readout, the legend's class ranges, coordinates in
+  every report. The histogram has a text description.
+- Toggles use `aria-pressed`, tabs `aria-selected`, section indexes `aria-current`.
+- Map rotation and tilt are off, so north is always up.

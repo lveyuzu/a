@@ -22,6 +22,13 @@ Last updated: 2026-11-14
 - [x] Observatory redesign (2026-11-14): dark instrument identity, map as a full-bleed well, Archivo and Source Serif 4,
       fixed-height readout console, report section index, evidence charts on Findings, typeset formulas, one-panel-at-a-time
       layout on phones. Scoring, data, routes and deep links unchanged. `DESIGN.md` rewritten.
+- [x] Plate & margin redesign (2026-11-15, root app): dark plates for maps, readouts and imagery, drafting-film paper for
+      the written analysis; Geologica and Newsreader; a neatline, title block, centre readout and segmented scale bar on
+      the Explore map; legend and readout moved into a margin band under it, with a histogram painted in map colours;
+      field report as a form with a label gutter; booktabs tables; numbered equations; full-bleed portfolio plate with a
+      lettered manifest. Scoring, data, routes and deep links unchanged. `DESIGN.md` rewritten.
+- [x] Night edition (2026-11-15): black base, graphite scale, navy keys with eased gradients, a brighter star field and
+      a navy rim of light behind the globe, one entrance animation per view. Scoring, data, routes unchanged.
 - [x] Cartography: classed similarity layer with numeric legend and histogram, cursor readout and pinned cells,
       coordinate navigation, globe / flat views, relief basemap, layer panel with 16 Earth layers, site maps with the
       scored window, interactive Moon and Mars maps (9 layers), equal-area portfolio map.

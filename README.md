@@ -11,6 +11,7 @@ similarity and confidence are reported separately: similarity in colour, confide
 
 ![Explore view](docs/img/explore.jpg)
 
+
 ## What it found
 
 | | Result | How it was established |
@@ -26,8 +27,10 @@ A candidate is a hypothesis for field work, not a conclusion.
 
 ## Run the application
 
-Live: **https://tariatiineserguu.github.io/Nasa-Hackathon/**. Every push to `main` rebuilds and publishes it through
-`.github/workflows/pages.yml`.
+Live: **https://nasa-hackathon-six.vercel.app/** (Vercel).
+
+Also published on GitHub Pages at https://tariatiineserguu.github.io/Nasa-Hackathon/, which every push to `main`
+rebuilds through `.github/workflows/pages.yml`.
 
 The processed results are committed, so the app runs without the data pipeline.
 
@@ -66,11 +69,11 @@ Deep links work, for example `#/explore?t=tranquillitatis&s=c117` opens the Harr
   every map layer that is shown but not scored, the outside sources that were examined and what was decided for each,
   and the limits of the work.
 
-The visual system (Observatory) is documented in [`DESIGN.md`](DESIGN.md).
+The visual system (Plate & margin) is documented in [`DESIGN.md`](DESIGN.md).
 
 | Field report | Map layers |
 |---|---|
-| ![Field report for Harrat Khaybar](docs/img/dossier.jpg) | ![Layer panel with a land surface temperature overlay](docs/img/layers.jpg) |
+| ![Field report](docs/img/dossier.jpg) | ![Layer panel with a land surface temperature overlay](docs/img/layers.jpg) |
 | **Reference region on Mars** | **Portfolio** |
 | ![Interactive Mars map for Jezero Crater](docs/img/reference.jpg) | ![Portfolio world map](docs/img/portfolio.jpg) |
 
@@ -169,7 +172,7 @@ web/        interactive application (React + TypeScript + MapLibre GL, Vite)
 web/public/data, web/public/img   committed pipeline outputs used by the app
 tests/      browser end-to-end checks
 docs/       presentation, screenshots and the data-source assessment (DATA_SOURCES.md)
-DESIGN.md   the Observatory design system as implemented
+DESIGN.md   the Plate & margin design system as implemented
 PROGRESS.md decisions, findings, limitations
 ```
 
